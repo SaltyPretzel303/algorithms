@@ -14,7 +14,7 @@ from typing import Dict
 
 def parse_input(provided_argv: list(), required: list()) -> Dict[str, str]:
     if provided_argv == None or len(provided_argv) < 2:
-        return None
+        return {}
 
     args = format_as_args(required)
 

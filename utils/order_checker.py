@@ -4,6 +4,8 @@ from input_reader import get_input
 input = get_input()
 if input == None:
     print("Please provide some input (piped data or path to the file) ... ")
+    print("Exiting ... ")
+
     exit(1)
 
 # assume that all values from input file are >=0

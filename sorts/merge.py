@@ -1,39 +1,37 @@
-from importlib.resources import open_text
-import os
-import sys
-from typing import Dict
-from utils.arg_parser import parse_input
+from utils.logs_holder import LogsHolder
+from utils.stopwatch import Stopwatch
+from utils.input_reader import get_input
 
-INPUT_ARG = "in"
-OUTPUT_ARG = "out"
+# First cli argument (if provided) will be the path to the file with unsorted values
+# If file path is not provided sys.stdin will be read (piped values)
 
-args: Dict[str, str] = parse_input(sys.argv[1:], [INPUT_ARG, OUTPUT_ARG])
+# logs will be stored in $DEFAULT_LOG_PATH
 
-DEFAULT_OUTPUT = "./output"
+DEFAULT_LOG_PATH = "./logs"
 
-if args == None or args == {} or INPUT_ARG not in args:
-    print("Please provide input and output file arguments:")
-    print("Input file as: \t--in")
-    print("Output file as: \t--out ")
+logs = LogsHolder()
 
-    exit(1)
+input_stream = get_input()
 
-if not os.path.exists(args.get(INPUT_ARG)):
-    print("Provided input file does not exists ... ")
+if input_stream == None:
+    print("Input stream is empty (no piped data) and the file path is not provided ... ")
+    print("Exiting ... ")
 
     exit(1)
 
+stopwatch = Stopwatch()
 
-input = open(args.get(INPUT_ARG), "r")
-lines = input.readlines()
-input.close()
+stopwatch.start()
 
-values = []
-for line in lines:
-    values.append(int(line))
+values = input_stream.readlines()
+input_stream.close()
 
-print(f"Read: {len(values)} values ...")
-print("Ready to sort them ...")
+for i in range(0, len(values)):
+    values[i] = int(values[i])
+
+stopwatch.stop()
+
+logs.add_log(f"Read {len(values)} values in: {stopwatch.get_time_str()}... ")
 
 
 def merge_sort(data, start_ind: int, end_ind: int):
@@ -77,20 +75,19 @@ def merge(data, start_ind, mid_ind, end_ind):
                 left_ind += 1
 
 
+stopwatch.start()
 merge_sort(values, 0, len(values)-1)
+stopwatch.stop()
 
-print("Sorting done ... ")
+logs.add_log(f"Sorting time: {stopwatch.get_time_str()}")
 
-output_path = DEFAULT_OUTPUT
-if OUTPUT_ARG in args:
-    output_path = args.get(OUTPUT_ARG)
+stopwatch.start()
 
-print(f"Writing data to {output_path}")
-
-f = open(output_path, "w")
 for v in values:
-    f.write(str(v)+'\n')
-    # by writing them this way every line will contain only single value
-f.close()
+    print(v)
 
-print("Writing done ... exiting ... ")
+stopwatch.stop()
+
+logs.add_log(f"Printing time: {stopwatch.get_time_str()}")
+
+logs.write(DEFAULT_LOG_PATH)

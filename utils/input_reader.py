@@ -29,6 +29,8 @@ def get_input() -> TextIO:
 
             if os.path.exists(input_filename):
                 input_stream = open(input_filename, 'r')
+            else:
+                print(f'Provided file does not exists: {input_filename}')
 
         except IndexError:
             # will happen if cli argument is not provided
