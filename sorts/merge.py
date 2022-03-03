@@ -55,7 +55,7 @@ def merge(data, start_ind, mid_ind, end_ind):
     right_ind: int = 0
     right_count = len(right_part)
 
-    out_indices = list(range(start_ind, mid_ind)) + \
+    out_indices = list(range(start_ind, mid_ind)) + \>
         list(range(mid_ind, end_ind+1))
 
     for out_ind in out_indices:

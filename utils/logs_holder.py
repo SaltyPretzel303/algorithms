@@ -1,4 +1,3 @@
-import os
 
 
 class LogsHolder:
@@ -8,7 +7,7 @@ class LogsHolder:
         self.logs.append(log)
 
     def get_logs_str(self) -> str:
-        str_logs:str = ""
+        str_logs: str = ""
         for log in self.logs:
             str_logs += log+"\n"
 
@@ -18,9 +17,9 @@ class LogsHolder:
         return self.logs
 
     def write(self, path):
-        if os.path.exists(path):
-            stream = open(path, "w")
-            for line in self.logs:
-                stream.write(line+"\n")
+        # if os.path.exists(path):
+        stream = open(path, "w")
+        for line in self.logs:
+            stream.write(line+"\n")
 
-            stream.close()
+        stream.close()
